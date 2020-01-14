@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "741614613888",
+    "firebase_url": "https://gift-shop-kotlin.firebaseio.com",
+    "project_id": "gift-shop-kotlin",
+    "storage_bucket": "gift-shop-kotlin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741614613888:android:8ecb773194e2f02687bd65",
+        "android_client_info": {
+          "package_name": "com.mengxyz.giftshopkolinedition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741614613888-9eig681qsnthgbm7d0vh2et0a342hmem.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mengxyz.giftshopkolinedition",
+            "certificate_hash": "77ea4651a92ed8fd7a0ccaaf4903853fa0917779"
+          }
+        },
+        {
+          "client_id": "741614613888-ihfpvp4hj5aith1rt437actmb46bi96n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAppn6K21ij6ACs4rWu61dF19Jtd1vY0FQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741614613888-ihfpvp4hj5aith1rt437actmb46bi96n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
