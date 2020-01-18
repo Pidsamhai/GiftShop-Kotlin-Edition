@@ -1,6 +1,7 @@
 package com.mengxyz.giftshopkolinedition.ui.fragment.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +57,8 @@ class HomeFragment : FragmentScope() {
             layoutManager = LinearLayoutManager(this@HomeFragment.context)
             adapter = groupAdapter
         }
+        groupAdapter.notifyDataSetChanged()
+        Log.e(TAG, "initRecycleView:Error Called ")
     }
 
 }

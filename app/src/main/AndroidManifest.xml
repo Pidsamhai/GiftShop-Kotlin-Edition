@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mengxyz.giftshopkolinedition">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,10 +10,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activity.register.RegisterActivity"></activity>
+        android:usesCleartextTraffic="true"
+        tools:targetApi="q">
+        <activity android:name=".ui.activity.register.RegisterActivity"/>
         <activity android:name=".ui.activity.product_info.ProductInfoActivity" />
         <activity android:name=".ui.activity.home.HomeActivity" />
         <activity android:name=".ui.activity.login.LoginActivity" /> <!-- <activity android:name=".ui.MainActivity" /> -->

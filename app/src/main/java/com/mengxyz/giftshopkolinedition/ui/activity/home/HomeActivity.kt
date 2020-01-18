@@ -54,7 +54,6 @@ class HomeActivity : AppCompatActivity() {
         val header = navigationView.getHeaderView(0)
         if(user != null){
             header.apply {
-                //findViewById<ImageView>(R.id.navigation_header_cover).load("https://raw.githubusercontent.com/vincentmorneau/material-apex/master/docs/img/home.jpg")
                 findViewById<TextView>(R.id.navigation_header_name).text = user.email
             }
         }else{
