@@ -1,5 +1,6 @@
 package com.mengxyz.giftshopkolinedition.extentions
 
+import android.text.Editable
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -20,6 +21,8 @@ fun List<ProductModel>.toFutureWeatherItems() : List<ProductRecycleItems> {
 fun FirebaseUser?.isNotnull(): Boolean {
     return FirebaseAuth.getInstance().currentUser != null
 }
+
+
 
 suspend fun <TResult> Task<TResult>.await():TResult  {
     if (isComplete) {
@@ -48,3 +51,4 @@ suspend fun <TResult> Task<TResult>.await():TResult  {
         }
     }
 }
+

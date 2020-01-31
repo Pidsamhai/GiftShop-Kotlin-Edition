@@ -2,7 +2,6 @@ package com.mengxyz.giftshopkolinedition.ui.fragment.addproduct
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,27 +11,25 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.mengxyz.giftshopkolinedition.R
-import com.mengxyz.giftshopkolinedition.extentions.await
+import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
 import com.mengxyz.giftshopkolinedition.ui.scope.FragmentScope
+import com.mengxyz.giftshopkolinedition.utils.Result
 import kotlinx.android.synthetic.main.fragment_add_product.*
+import kotlinx.android.synthetic.main.product_input.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.math.log
 
 @SuppressLint("SetTextI18n")
 class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPageChangeListener {
 
-    private val storage = FirebaseStorage.getInstance("gs://gift-shop-kotlin.appspot.com")
-    private val storageRef = storage.reference
-    private lateinit var productRef: StorageReference
+    private lateinit var viewModel: AddProductFragmentViewModel
     private var imgs: MutableList<Uri> = mutableListOf()
     private lateinit var adapter: PagerAdapter
 
@@ -45,12 +42,18 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (activity as AppCompatActivity).findViewById<TextView>(R.id.appbar_title).text = " Add Product "
-        open_file.setOnClickListener(this)
+        (activity as AppCompatActivity).findViewById<TextView>(R.id.appbar_title).text =
+            " Add Product "
+        viewModel = ViewModelProviders.of(this).get(AddProductFragmentViewModel::class.java)
         upload_file.setOnClickListener(this)
         add_img.setOnClickListener(this)
         remove_img.setOnClickListener(this)
         initViewPager()
+        viewModel.getProduct("d85d4ac3-dca0-4f8b-8de9-3f4641508dee").observe(this, Observer {
+            if(it == null)
+                return@Observer
+            Log.e("response", it.toString())
+        })
     }
 
 
@@ -63,11 +66,11 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
     private fun pickImage() {
         ImagePicker.with(this)
             .galleryOnly()
-            .compress(1024)         //Final image size will be less than 1 MB(Optional)
+            .compress(512)
             .maxResultSize(
                 1080,
                 1080
-            )  //Final image resolution will be less than 1080 x 1080(Optional)
+            )
             .start { resultCode, data ->
                 when (resultCode) {
                     Activity.RESULT_OK -> {
@@ -91,39 +94,45 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
     }
 
     private fun upload() = launch(Dispatchers.Main) {
+        val imageUrlList = mutableListOf<String>()
+        val imageNameList = mutableListOf<String>()
+        val size = adapter.getItemSize()
         try {
             loading.visibility = View.VISIBLE
-            val size = adapter.getItemSize()
-            adapter.getAllItem().forEachIndexed {idx,img ->
-                val uuid = UUID.randomUUID().toString()
+            adapter.getAllItem().forEachIndexed { idx, img ->
                 upload_status.text = "upload ${idx + 1} / $size ..."
-                productRef = storageRef.child("product/$uuid.png")
-                try {
-                    productRef.putFile(img).await()
-                    val url = productRef.downloadUrl.await()
-                    //Toast.makeText(context, url.toString(), Toast.LENGTH_SHORT).show()
-                } catch (e: Exception) {
-                    Log.e("ProductRef error", "${e.message}")
+                val result = viewModel.uploadImg(img)
+                if (result != Result.Error) {
+                    val (name: String, url: String) = result as Pair<String, String>
+                    imageNameList.add(name)
+                    imageUrlList.add(url)
+                } else {
+                    Log.e("Upload image Error", "upload:$idx ")
                 }
             }
-            loading.visibility = View.GONE
-            Toast.makeText(context, "Uploaded $size / $size", Toast.LENGTH_SHORT).show()
-        }catch (e:Exception){
-            Log.e("Upload file", "Error ",e)
+            if (imageNameList.size > 0 && imageUrlList.size > 0) {
+                addDataBase(mapValue(imageNameList, imageUrlList))
+                loading.visibility = View.GONE
+                showSnackBar("Uploaded")
+            } else {
+                loading.visibility = View.GONE
+                Log.e("No file selected", "Error")
+            }
+        } catch (e: Exception) {
+            Log.e("Upload file", "Error ", e)
         }
     }
 
     override fun onClick(v: View?) {
         when (v) {
-            open_file -> {
-                pickImage()
-            }
             add_img -> {
                 pickImage()
             }
             upload_file -> {
                 if (adapter.getItemSize() > 0) {
                     upload()
+                } else {
+                    showSnackBar("Please add Image")
                 }
             }
             remove_img -> {
@@ -140,6 +149,38 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         }
     }
 
+    private fun mapValue(
+        imageNameList: MutableList<String>,
+        imageUrlList: MutableList<String>
+    ): ProductModel2 {
+        val productModel2 = ProductModel2(
+            name = e_product_name.text.toString(),
+            price = e_product_price.text.toString().toDouble(),
+            picture = imageNameList,
+            picture_url = imageUrlList,
+            description = e_product_detail.text.toString(),
+            tel = e_tel.text.toString(),
+            product_id = null,
+            facebook_name = e_facebook_name.text.toString(),
+            facebook_url = e_facebook_url.text.toString(),
+            line_id = e_line_id.text.toString(),
+            line_url = e_line_url.text.toString(),
+            lat = null,
+            lon = null,
+            timestamps = FieldValue.serverTimestamp(),
+            u_id = null
+            )
+        return productModel2
+    }
+
+    private fun addDataBase(mapValue: ProductModel2) = launch(Dispatchers.Main) {
+        val result = viewModel.addProduct(mapValue)
+        if (result == Result.OK)
+            showSnackBar("Upload Database Success")
+        else
+            showSnackBar("Upload Database Error")
+    }
+
     private fun updateIndicator(position: Int = 0, size: Int = 0) {
         if (size == 0) remove_img.hide()
         text_indicator.text = "${if (size > 0) position + 1 else 0} / $size"
@@ -152,6 +193,6 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
     }
 
     override fun onPageSelected(position: Int) {}
-
-
 }
+
+
