@@ -2,20 +2,19 @@ package com.mengxyz.giftshopkolinedition.ui
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import coil.api.load
-import coil.size.Scale
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.mengxyz.giftshopkolinedition.BuildConfig
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.ui.activity.home.HomeActivity
 import com.mengxyz.giftshopkolinedition.ui.activity.login.LoginActivity
 import com.rbddevs.splashy.Splashy
-import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
-    private val user = FirebaseAuth.getInstance().currentUser
+    private val mAuth by inject<FirebaseAuth>()
+    private val user = mAuth.currentUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(!BuildConfig.DEBUG){

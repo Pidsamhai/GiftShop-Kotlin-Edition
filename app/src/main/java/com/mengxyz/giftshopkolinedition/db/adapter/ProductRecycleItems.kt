@@ -6,7 +6,6 @@ import coil.api.load
 import coil.size.Scale
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel
-import com.mengxyz.giftshopkolinedition.ui.activity.login.LoginActivity
 import com.mengxyz.giftshopkolinedition.ui.activity.product_info.ProductInfoActivity
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item

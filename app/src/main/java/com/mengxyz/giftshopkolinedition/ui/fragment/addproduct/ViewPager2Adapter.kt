@@ -1,16 +1,10 @@
 package com.mengxyz.giftshopkolinedition.ui.fragment.addproduct
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import coil.api.load
-import coil.size.Scale
 import com.mengxyz.giftshopkolinedition.R
 
 private val colors = intArrayOf(

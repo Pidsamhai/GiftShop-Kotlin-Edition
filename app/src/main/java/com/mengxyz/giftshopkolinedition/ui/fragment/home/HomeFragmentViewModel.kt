@@ -1,6 +1,5 @@
 package com.mengxyz.giftshopkolinedition.ui.fragment.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +11,9 @@ import com.mengxyz.giftshopkolinedition.db.repo.FireStoreRepository
 
 const val TAG = "FIRE_STORE_VIEW_MODEL"
 
-class HomeFragmentViewModel : ViewModel(){
-    private var fireStoreRepository = FireStoreRepository()
+class HomeFragmentViewModel(
+    private var fireStoreRepository:FireStoreRepository
+) : ViewModel(){
     private var userData : MutableLiveData<UserModel> = MutableLiveData()
     private var productData : MutableLiveData<List<ProductModel>> = MutableLiveData()
 

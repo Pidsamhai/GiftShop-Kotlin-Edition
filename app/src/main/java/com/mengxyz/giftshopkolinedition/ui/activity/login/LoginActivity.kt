@@ -20,17 +20,14 @@ import com.mengxyz.giftshopkolinedition.ui.activity.home.HomeActivity
 import com.mengxyz.giftshopkolinedition.ui.activity.register.RegisterActivity
 import com.mengxyz.giftshopkolinedition.utils.Validator
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.e_email
-import kotlinx.android.synthetic.main.activity_login.e_password
-import kotlinx.android.synthetic.main.activity_login.l_email
-import kotlinx.android.synthetic.main.activity_login.l_password
+import org.koin.android.ext.android.inject
 
 class LoginActivity : AppCompatActivity(),
     View.OnClickListener,
     OnFailureListener,
     OnCompleteListener<AuthResult> {
 
-    private val mAuth = FirebaseAuth.getInstance()
+    private val mAuth by inject<FirebaseAuth>()
     private lateinit var materialAlertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {

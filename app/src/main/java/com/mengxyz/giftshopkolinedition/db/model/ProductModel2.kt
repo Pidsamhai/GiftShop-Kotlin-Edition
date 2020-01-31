@@ -1,7 +1,5 @@
 package com.mengxyz.giftshopkolinedition.db.model
 
-import com.google.firebase.Timestamp
-
 data class ProductModel2(
     override var u_id: String? = null,
 //    override var u_name: String?,

@@ -88,8 +88,9 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:1.6'
     implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.1'
 
-    //implementation "com.github.ChiliLabs:ChiliPhotoPicker:0.3.1"
-    //implementation 'gun0912.ted:tedimagepicker:1.0.12'
+    //Koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
 
 }
