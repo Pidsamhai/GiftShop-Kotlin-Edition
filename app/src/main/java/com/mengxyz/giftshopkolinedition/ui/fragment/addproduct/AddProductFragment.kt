@@ -12,10 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
@@ -25,11 +23,11 @@ import kotlinx.android.synthetic.main.fragment_add_product.*
 import kotlinx.android.synthetic.main.product_input.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("SetTextI18n")
 class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPageChangeListener {
-
-    private lateinit var viewModel: AddProductFragmentViewModel
+    private val viewModel by viewModel<AddProductFragmentViewModel>()
     private var imgs: MutableList<Uri> = mutableListOf()
     private lateinit var adapter: PagerAdapter
 
@@ -44,13 +42,12 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).findViewById<TextView>(R.id.appbar_title).text =
             " Add Product "
-        viewModel = ViewModelProviders.of(this).get(AddProductFragmentViewModel::class.java)
         upload_file.setOnClickListener(this)
         add_img.setOnClickListener(this)
         remove_img.setOnClickListener(this)
         initViewPager()
         viewModel.getProduct("d85d4ac3-dca0-4f8b-8de9-3f4641508dee").observe(this, Observer {
-            if(it == null)
+            if (it == null)
                 return@Observer
             Log.e("response", it.toString())
         })
@@ -169,7 +166,7 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
             lon = null,
             timestamps = FieldValue.serverTimestamp(),
             u_id = null
-            )
+        )
         return productModel2
     }
 

@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.db.adapter.ProductRecycleItems
@@ -20,9 +19,10 @@ import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : FragmentScope() {
-    private lateinit var viewModel: HomeFragmentViewModel
+    private val viewModel by viewModel<HomeFragmentViewModel>()
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -34,7 +34,7 @@ class HomeFragment : FragmentScope() {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).findViewById<TextView>(R.id.appbar_title).text = " Home "
         refreshing_layout.isRefreshing = true
-        viewModel = ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
+        //viewModel = ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
         viewModel.getAllProduct().observe(this, Observer {
             if (it == null)
                 return@Observer

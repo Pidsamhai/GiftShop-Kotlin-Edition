@@ -7,18 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.QuerySnapshot
-import com.mengxyz.giftshopkolinedition.db.model.ProductModel
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
 import com.mengxyz.giftshopkolinedition.db.repo.FireStoreRepository
 import com.mengxyz.giftshopkolinedition.extentions.await
-import com.mengxyz.giftshopkolinedition.utils.Result
-import java.lang.Exception
 import java.util.*
 
-class AddProductFragmentViewModel:ViewModel() {
-    private val fireStoreRepository = FireStoreRepository()
-
+class AddProductFragmentViewModel(
+    private val fireStoreRepository: FireStoreRepository
+):ViewModel() {
     private var productData:MutableLiveData<ProductModel2> = MutableLiveData()
 
     suspend fun addProduct(product:ProductModel2):Any{

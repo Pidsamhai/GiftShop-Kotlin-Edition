@@ -1,33 +1,22 @@
 package com.mengxyz.giftshopkolinedition.ui.activity.home
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.MediaController
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import coil.api.load
 import com.google.firebase.auth.FirebaseAuth
 import com.mengxyz.giftshopkolinedition.R
-import com.mengxyz.giftshopkolinedition.ui.fragment.home.HomeFragment
-import com.mengxyz.giftshopkolinedition.ui.fragment.myproduct.MyProductFragment
 import kotlinx.android.synthetic.main.activity_home.*
+import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+    private val mAuth by inject<FirebaseAuth>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +38,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initUserInfo(){
-        val user = FirebaseAuth.getInstance().currentUser
+        val user = mAuth.currentUser
         val rnd = Random.nextInt(0,100).toString()
         val header = navigationView.getHeaderView(0)
         if(user != null){

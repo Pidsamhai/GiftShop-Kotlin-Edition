@@ -1,16 +1,12 @@
 package com.mengxyz.giftshopkolinedition.ui.fragment.addproduct
 
 import android.content.Context
-import android.database.DataSetObserver
-import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.PagerAdapter
 import coil.api.load
 import com.mengxyz.giftshopkolinedition.R

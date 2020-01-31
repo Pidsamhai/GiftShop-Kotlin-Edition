@@ -16,11 +16,11 @@ import com.mengxyz.giftshopkolinedition.utils.Validator
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import org.koin.android.ext.android.inject
 
 class RegisterActivity : ActivityScope(), View.OnClickListener {
 
-    private val mAuth = FirebaseAuth.getInstance()
+    private val mAuth by inject<FirebaseAuth>()
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {

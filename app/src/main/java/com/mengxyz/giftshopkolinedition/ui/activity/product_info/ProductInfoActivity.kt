@@ -1,7 +1,5 @@
 package com.mengxyz.giftshopkolinedition.ui.activity.product_info
 
-import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View

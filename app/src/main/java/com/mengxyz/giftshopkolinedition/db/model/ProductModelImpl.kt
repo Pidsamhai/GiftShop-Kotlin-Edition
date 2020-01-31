@@ -1,7 +1,5 @@
 package com.mengxyz.giftshopkolinedition.db.model
 
-import com.google.firebase.Timestamp
-
 interface ProductModelImpl {
     var u_id: String?
 //    var u_name: String?
