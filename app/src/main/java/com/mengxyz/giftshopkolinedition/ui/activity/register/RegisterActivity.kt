@@ -1,6 +1,5 @@
 package com.mengxyz.giftshopkolinedition.ui.activity.register
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -21,7 +20,6 @@ import org.koin.android.ext.android.inject
 class RegisterActivity : ActivityScope(), View.OnClickListener {
 
     private val mAuth by inject<FirebaseAuth>()
-    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,24 +42,17 @@ class RegisterActivity : ActivityScope(), View.OnClickListener {
             )
         )
         b_register.setOnClickListener(this)
-
-        progressDialog = ProgressDialog(this)
-        progressDialog.apply {
-            setTitle("Loading")
-            setMessage("Registering...")
-            setCancelable(false)
-        }
     }
 
     private fun createAccount() = launch(Dispatchers.Main) {
-        progressDialog.show()
+        showLoading()
         try {
              mAuth.createUserWithEmailAndPassword(e_email.text.toString(), e_password.text.toString()).await()
             Toast.makeText(this@RegisterActivity, mAuth.currentUser?.email, Toast.LENGTH_SHORT).show()
         }catch (e:FirebaseAuthException){
             Toast.makeText(this@RegisterActivity, e.message.toString(), Toast.LENGTH_SHORT).show()
         }
-        progressDialog.dismiss()
+        hideLoading()
         if(mAuth.currentUser.isNotnull()){
             launchHomeActivity()
         }
