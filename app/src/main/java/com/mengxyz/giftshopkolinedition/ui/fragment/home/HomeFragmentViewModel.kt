@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.QuerySnapshot
-import com.mengxyz.giftshopkolinedition.db.model.ProductModel
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
 import com.mengxyz.giftshopkolinedition.db.model.UserModel
 import com.mengxyz.giftshopkolinedition.db.repo.FireStoreRepository

@@ -1,17 +1,16 @@
 package com.mengxyz.giftshopkolinedition.db.adapter
 
 import android.content.Intent
-import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import androidx.transition.*
-import androidx.viewpager2.widget.ViewPager2
+import androidx.transition.AutoTransition
+import androidx.transition.ChangeBounds
+import androidx.transition.TransitionManager
 import coil.api.load
 import coil.size.Scale
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
 import com.mengxyz.giftshopkolinedition.ui.activity.product_info.ProductInfoActivity
-import com.mengxyz.giftshopkolinedition.ui.fragment.home.ViewPager2Adapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.product_item.*

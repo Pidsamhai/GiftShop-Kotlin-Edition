@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.mengxyz.giftshopkolinedition.db.adapter.ProductRecycleItems
-import com.mengxyz.giftshopkolinedition.db.model.ProductModel
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
