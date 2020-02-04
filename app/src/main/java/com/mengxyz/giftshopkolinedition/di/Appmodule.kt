@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
 import com.mengxyz.giftshopkolinedition.db.repo.FireStoreRepository
+import com.mengxyz.giftshopkolinedition.ui.activity.product_info.ProductInfoViewModel
 import com.mengxyz.giftshopkolinedition.ui.fragment.addproduct.AddProductFragmentViewModel
 import com.mengxyz.giftshopkolinedition.ui.fragment.home.HomeFragmentViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -16,6 +17,7 @@ private const val MAX_RETIRE:Long = 0
 val myModule = module {
     viewModel { AddProductFragmentViewModel(get()) }
     viewModel { HomeFragmentViewModel(get()) }
+    viewModel { ProductInfoViewModel(get()) }
     single { FireStoreRepository(get(),get()) }
     single {
         val instance = FirebaseFirestore.getInstance()

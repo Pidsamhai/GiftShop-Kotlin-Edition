@@ -118,6 +118,7 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         } catch (e: Exception) {
             Log.e("Upload file", "Error ", e)
         }
+        activity?.onBackPressed()
     }
 
     override fun onClick(v: View?) {

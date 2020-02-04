@@ -34,7 +34,6 @@ class HomeFragment : FragmentScope() {
         super.onActivityCreated(savedInstanceState)
         (activity as AppCompatActivity).findViewById<TextView>(R.id.appbar_title).text = " Home "
         refreshing_layout.isRefreshing = true
-        //viewModel = ViewModelProviders.of(this).get(HomeFragmentViewModel::class.java)
         viewModel.getAllProduct().observe(this, Observer {
             if (it == null)
                 return@Observer

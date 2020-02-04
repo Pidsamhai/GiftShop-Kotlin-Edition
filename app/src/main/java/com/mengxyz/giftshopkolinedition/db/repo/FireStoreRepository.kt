@@ -19,7 +19,7 @@ class FireStoreRepository(
     }
 
     fun getAllProduct():CollectionReference{
-        return fireStoreDB.collection(PRODUCT_COLLECTION)
+        return fireStoreDB.collection(PRODUCT_COLLECTION2)
     }
 
     fun getProduct():CollectionReference{

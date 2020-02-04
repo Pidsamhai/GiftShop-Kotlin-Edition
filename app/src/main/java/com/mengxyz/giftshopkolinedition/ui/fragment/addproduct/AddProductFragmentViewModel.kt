@@ -35,12 +35,12 @@ class AddProductFragmentViewModel(
 
     suspend fun uploadImg(uri: Uri):Any{
         val uuid = UUID.randomUUID().toString()
-        val img_name = "$uuid.png"
-        val productRef = fireStoreRepository.uploadImg().child(img_name)
+        val imgName = "$uuid.png"
+        val productRef = fireStoreRepository.uploadImg().child(imgName)
         return  try {
             productRef.putFile(uri).await()
             val url  = productRef.downloadUrl.await()
-            Pair(img_name,url.toString())
+            Pair(imgName,url.toString())
         }catch (e:Exception){
             e
         }
