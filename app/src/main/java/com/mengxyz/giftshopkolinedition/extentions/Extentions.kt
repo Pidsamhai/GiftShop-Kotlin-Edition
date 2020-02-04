@@ -5,13 +5,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.mengxyz.giftshopkolinedition.db.adapter.ProductRecycleItems
-import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
+import com.mengxyz.giftshopkolinedition.db.model.ProductModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-fun List<ProductModel2>.toFutureWeatherItems() : List<ProductRecycleItems> {
+fun List<ProductModel>.toFutureWeatherItems() : List<ProductRecycleItems> {
     return this.map {
         ProductRecycleItems(it)
     }

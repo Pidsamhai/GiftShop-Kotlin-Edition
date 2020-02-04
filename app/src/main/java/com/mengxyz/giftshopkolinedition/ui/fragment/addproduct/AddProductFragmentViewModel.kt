@@ -1,23 +1,20 @@
 package com.mengxyz.giftshopkolinedition.ui.fragment.addproduct
 
 import android.net.Uri
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
-import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
+import com.mengxyz.giftshopkolinedition.db.model.ProductModel
 import com.mengxyz.giftshopkolinedition.db.repo.FireStoreRepository
 import com.mengxyz.giftshopkolinedition.extentions.await
+import timber.log.Timber
 import java.util.*
 
 class AddProductFragmentViewModel(
     private val fireStoreRepository: FireStoreRepository
 ):ViewModel() {
-    private var productData:MutableLiveData<ProductModel2> = MutableLiveData()
+    private var productData:MutableLiveData<ProductModel> = MutableLiveData()
 
-    suspend fun addProduct(product:ProductModel2):Any{
+    suspend fun addProduct(product:ProductModel):Any{
         val uuid = UUID.randomUUID().toString()
         product.product_id = uuid
         return try {
@@ -25,10 +22,10 @@ class AddProductFragmentViewModel(
                 .document(uuid)
                 .set(product)
                 .await()
-            Log.e("FromViewModel", "Returned")
+            Timber.e("Returned")
             0
-        }catch (e:Exception){
-            Log.e("FromViewModel", "Returned")
+        }catch (e:Exception) {
+            Timber.e("Returned")
             e
         }
     }
@@ -44,17 +41,5 @@ class AddProductFragmentViewModel(
         }catch (e:Exception){
             e
         }
-    }
-
-    fun getProduct(docID:String):LiveData<ProductModel2>{
-        fireStoreRepository.getProduct().document(docID).addSnapshotListener(EventListener<DocumentSnapshot>{v,e->
-            if(e!=null){
-                productData.value = null
-                return@EventListener
-            }
-            productData.value = v?.toObject(ProductModel2::class.java)
-        })
-
-        return productData
     }
 }

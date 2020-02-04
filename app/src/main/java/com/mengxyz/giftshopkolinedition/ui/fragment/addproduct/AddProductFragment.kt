@@ -4,19 +4,16 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.firestore.FieldValue
 import com.mengxyz.giftshopkolinedition.R
-import com.mengxyz.giftshopkolinedition.db.model.ProductModel2
+import com.mengxyz.giftshopkolinedition.db.model.ProductModel
 import com.mengxyz.giftshopkolinedition.ui.scope.FragmentScope
 import com.mengxyz.giftshopkolinedition.utils.Result
 import kotlinx.android.synthetic.main.fragment_add_product.*
@@ -24,6 +21,7 @@ import kotlinx.android.synthetic.main.product_input.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 @SuppressLint("SetTextI18n")
 class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPageChangeListener {
@@ -46,11 +44,6 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         add_img.setOnClickListener(this)
         remove_img.setOnClickListener(this)
         initViewPager()
-        viewModel.getProduct("d85d4ac3-dca0-4f8b-8de9-3f4641508dee").observe(this, Observer {
-            if (it == null)
-                return@Observer
-            Log.e("response", it.toString())
-        })
     }
 
 
@@ -80,11 +73,10 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
                         }
                     }
                     ImagePicker.RESULT_ERROR -> {
-                        Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
-                            .show()
+                        showToast(ImagePicker.getError(data))
                     }
                     else -> {
-                        Toast.makeText(context, "Task Cancelled", Toast.LENGTH_SHORT).show()
+                        showToast("Task Cancelled")
                     }
                 }
             }
@@ -96,15 +88,16 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         val size = adapter.getItemSize()
         try {
             loading.visibility = View.VISIBLE
+            @Suppress("UNCHECKED_CAST")
             adapter.getAllItem().forEachIndexed { idx, img ->
                 upload_status.text = "upload ${idx + 1} / $size ..."
                 val result = viewModel.uploadImg(img)
                 if (result != Result.Error) {
-                    val (name: String, url: String) = result as Pair<String, String>
+                    val (name: String, url: String) = result as Pair<String,String>
                     imageNameList.add(name)
                     imageUrlList.add(url)
                 } else {
-                    Log.e("Upload image Error", "upload:$idx ")
+                    Timber.e("Upload image Error upload:$idx ")
                 }
             }
             if (imageNameList.size > 0 && imageUrlList.size > 0) {
@@ -113,10 +106,10 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
                 showSnackBar("Uploaded")
             } else {
                 loading.visibility = View.GONE
-                Log.e("No file selected", "Error")
+                Timber.e("No file selected Error")
             }
         } catch (e: Exception) {
-            Log.e("Upload file", "Error ", e)
+            Timber.e(e,"Upload file Error")
         }
         activity?.onBackPressed()
     }
@@ -150,8 +143,8 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
     private fun mapValue(
         imageNameList: MutableList<String>,
         imageUrlList: MutableList<String>
-    ): ProductModel2 {
-        val productModel2 = ProductModel2(
+    ): ProductModel {
+        val productModel2 = ProductModel(
             name = e_product_name.text.toString(),
             price = e_product_price.text.toString().toDouble(),
             picture = imageNameList,
@@ -171,7 +164,7 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         return productModel2
     }
 
-    private fun addDataBase(mapValue: ProductModel2) = launch(Dispatchers.Main) {
+    private fun addDataBase(mapValue: ProductModel) = launch(Dispatchers.Main) {
         val result = viewModel.addProduct(mapValue)
         if (result == Result.OK)
             showSnackBar("Upload Database Success")

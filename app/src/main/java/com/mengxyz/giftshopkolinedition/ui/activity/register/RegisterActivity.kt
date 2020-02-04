@@ -3,7 +3,6 @@ package com.mengxyz.giftshopkolinedition.ui.activity.register
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.mengxyz.giftshopkolinedition.R
@@ -48,9 +47,9 @@ class RegisterActivity : ActivityScope(), View.OnClickListener {
         showLoading()
         try {
              mAuth.createUserWithEmailAndPassword(e_email.text.toString(), e_password.text.toString()).await()
-            Toast.makeText(this@RegisterActivity, mAuth.currentUser?.email, Toast.LENGTH_SHORT).show()
+            showToast(mAuth.currentUser?.email!!)
         }catch (e:FirebaseAuthException){
-            Toast.makeText(this@RegisterActivity, e.message.toString(), Toast.LENGTH_SHORT).show()
+            showToast(e.message.toString())
         }
         hideLoading()
         if(mAuth.currentUser.isNotnull()){
@@ -79,7 +78,7 @@ class RegisterActivity : ActivityScope(), View.OnClickListener {
         when (v) {
             b_register -> {
                 if (inputIsError()) {
-                    Toast.makeText(this, "Some thing wrong!!", Toast.LENGTH_SHORT).show()
+                    showToast("Some thing wrong!!")
                     return
                 }
                 createAccount()

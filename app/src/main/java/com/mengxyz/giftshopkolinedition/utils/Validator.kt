@@ -12,38 +12,33 @@ private fun validate(pwd: TextInputEditText, cPwd: TextInputEditText):Boolean{
 class Validator {
 
     class Password(
-        pwd:TextInputEditText,
-        pwdLayout: TextInputLayout,
-        cPwd: TextInputEditText? = null,
-        cPwdLayout: TextInputLayout? = null
+        private val pwd:TextInputEditText,
+        private val pwdLayout: TextInputLayout,
+        private val cPwd: TextInputEditText? = null,
+        private val cPwdLayout: TextInputLayout? = null
     ):TextWatcher{
-
-        private val mPwd = pwd
-        private val mPwdLayout = pwdLayout
-        private val mCPwd = cPwd
-        private val mCPwdLayout = cPwdLayout
 
         private fun isValidate(str:String) : Boolean{
             return str.length >= 6
         }
 
         override fun afterTextChanged(s: Editable?) {
-            if (mPwd.text.toString().isNotEmpty()){
-                if(isValidate(mPwd.text.toString())){
-                    mPwdLayout.isErrorEnabled = false
+            if (pwd.text.toString().isNotEmpty()){
+                if(isValidate(pwd.text.toString())){
+                    pwdLayout.isErrorEnabled = false
                 }else{
-                    mPwdLayout.error = "Password min 6 character"
+                    pwdLayout.error = "Password min 6 character"
                 }
             }else{
-                mPwdLayout.error = "Password required"
+                pwdLayout.error = "Password required"
             }
 
             // matches password
-            if(mCPwd != null && mCPwdLayout != null){
-                if(!validate(mPwd,mCPwd)){
-                    mCPwdLayout.error = "Password not match"
+            if(cPwd != null && cPwdLayout != null){
+                if(!validate(pwd,cPwd)){
+                    cPwdLayout.error = "Password not match"
                 }else{
-                    mCPwdLayout.isErrorEnabled = false
+                    cPwdLayout.isErrorEnabled = false
                 }
             }
         }
@@ -55,23 +50,21 @@ class Validator {
     }
 
     class Email(
-        edt: TextInputEditText,
-        layout: TextInputLayout
+        private val email: TextInputEditText,
+        private val emailLayout: TextInputLayout
     ) : TextWatcher {
-        private val mEdt = edt
-        private val mLayout = layout
 
         private fun isEmailValid(email: CharSequence): Boolean {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         }
 
         override fun afterTextChanged(s: Editable?) {
-            if (mEdt.text.toString().isEmpty()) {
-                mLayout.error = "Email is required"
-            } else if (!isEmailValid(mEdt.text.toString())) {
-                mLayout.error = "Email is required"
+            if (email.text.toString().isEmpty()) {
+                emailLayout.error = "Email is required"
+            } else if (!isEmailValid(email.text.toString())) {
+                emailLayout.error = "Email is required"
             } else {
-                mLayout.isErrorEnabled = false
+                emailLayout.isErrorEnabled = false
             }
         }
 
@@ -82,20 +75,17 @@ class Validator {
     }
 
     class ConfirmPassword(
-        pwd:TextInputEditText,
-        cPwd:TextInputEditText,
-        cPwdLayout: TextInputLayout
+        private val pwd:TextInputEditText,
+        private val cPwd:TextInputEditText,
+        private val cPwdLayout: TextInputLayout
     ):TextWatcher{
-        private val mPwd = pwd
-        private val mCPwd = cPwd
-        private val mCPwdLayout = cPwdLayout
 
 
         override fun afterTextChanged(s: Editable?) {
-            if(!validate(mPwd,mCPwd)){
-                mCPwdLayout.error = "Password not match"
+            if(!validate(pwd,cPwd)){
+                cPwdLayout.error = "Password not match"
             }else{
-                mCPwdLayout.isErrorEnabled = false
+                cPwdLayout.isErrorEnabled = false
             }
         }
 

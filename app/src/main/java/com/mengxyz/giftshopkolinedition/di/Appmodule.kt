@@ -12,16 +12,17 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 private const val STORAGE_URL = "gs://gift-shop-kotlin.appspot.com"
-private const val MAX_RETIRE:Long = 0
+private const val MAX_RETIRE: Long = 0
 
 val myModule = module {
     viewModel { AddProductFragmentViewModel(get()) }
     viewModel { HomeFragmentViewModel(get()) }
     viewModel { ProductInfoViewModel(get()) }
-    single { FireStoreRepository(get(),get()) }
+    single { FireStoreRepository(get(), get()) }
     single {
         val instance = FirebaseFirestore.getInstance()
-        instance.firestoreSettings = FirebaseFirestoreSettings.Builder().setPersistenceEnabled(true).build()
+        instance.firestoreSettings =
+            FirebaseFirestoreSettings.Builder().setPersistenceEnabled(true).build()
         instance
     }
     single {
@@ -32,5 +33,5 @@ val myModule = module {
         }
         instance
     }
-    single {FirebaseAuth.getInstance()}
+    single { FirebaseAuth.getInstance() }
 }

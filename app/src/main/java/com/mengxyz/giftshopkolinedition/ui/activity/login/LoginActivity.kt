@@ -1,34 +1,28 @@
 package com.mengxyz.giftshopkolinedition.ui.activity.login
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.Task
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.ui.activity.home.HomeActivity
 import com.mengxyz.giftshopkolinedition.ui.activity.register.RegisterActivity
+import com.mengxyz.giftshopkolinedition.ui.scope.ActivityScope
 import com.mengxyz.giftshopkolinedition.utils.Validator
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.ext.android.inject
 
-class LoginActivity : AppCompatActivity(),
+class LoginActivity : ActivityScope(),
     View.OnClickListener,
     OnFailureListener,
     OnCompleteListener<AuthResult> {
 
     private val mAuth by inject<FirebaseAuth>()
-    private lateinit var materialAlertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,16 +32,6 @@ class LoginActivity : AppCompatActivity(),
         t_register.setOnClickListener(this)
         e_email.addTextChangedListener(Validator.Email(e_email, l_email))
         e_password.addTextChangedListener(Validator.Password(e_password, l_password))
-        materialAlertDialog = MaterialAlertDialogBuilder(this)
-            .setTitle("Login")
-            .setMessage("loading...")
-            .setCancelable(false)
-            .setNegativeButton(
-                "Cancel",
-                DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
-                    materialAlertDialog.dismiss()
-                })
-            .create()
     }
 
     private fun emailLogin() {
@@ -55,10 +39,11 @@ class LoginActivity : AppCompatActivity(),
             || l_password.isErrorEnabled
             || e_email.text.toString().isEmpty()
             || e_password.text.toString().isEmpty()) {
-            Snackbar.make(window.decorView.rootView,"Please enter Email or Password",Snackbar.LENGTH_SHORT).show()
+
+            showSnackBar("Please enter Email or Password")
             return
         }
-        materialAlertDialog.show()
+        showLoading()
         mAuth.signInWithEmailAndPassword(
             e_email.text.toString(),
             e_password.text.toString()
@@ -79,14 +64,14 @@ class LoginActivity : AppCompatActivity(),
     }
 
     override fun onFailure(e: Exception) {
-        Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
-        materialAlertDialog.dismiss()
+        showToast(e.toString())
+        hideLoading()
     }
 
     override fun onComplete(task: Task<AuthResult>) {
         if (task.isSuccessful) {
-            Toast.makeText(this, mAuth.currentUser?.email, Toast.LENGTH_SHORT).show()
-            materialAlertDialog.dismiss()
+            showToast(mAuth.currentUser?.email!!)
+            hideLoading()
             startActivity(Intent(this,HomeActivity::class.java))
             finishAffinity()
         }

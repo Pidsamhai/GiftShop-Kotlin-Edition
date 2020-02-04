@@ -1,8 +1,11 @@
 package com.mengxyz.giftshopkolinedition.ui.scope
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.mengxyz.giftshopkolinedition.utils.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +20,8 @@ abstract class ActivityScope: AppCompatActivity(), CoroutineScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initLoading()
         job = Job()
-        adg = LoadingDialog(context = this).create()
     }
 
     override fun onDestroy() {
@@ -26,10 +29,18 @@ abstract class ActivityScope: AppCompatActivity(), CoroutineScope {
         job.cancel()
     }
 
-    fun showLoading(){
-        adg.show()
+    fun showLoading() = adg.show()
+    fun hideLoading() = adg.dismiss()
+
+    fun showToast(msg: String,duration:Int = Toast.LENGTH_SHORT) = Toast.makeText(this,msg,duration).show()
+
+    fun showSnackBar(msg: String,duration: Int = Snackbar.LENGTH_SHORT) = Snackbar.make(window.decorView.rootView,msg,duration).show()
+
+    private fun initLoading(){
+        adg = LoadingDialog(this).create()
     }
-    fun hideLoading(){
-        adg.dismiss()
+
+    fun setLoadingCallback(callback:DialogInterface.OnClickListener?){
+        adg = LoadingDialog(this,callback).create()
     }
 }
