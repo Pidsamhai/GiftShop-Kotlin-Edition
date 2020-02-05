@@ -103,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_my_location"
             android:backgroundTint="@color/white"
             android:hint="@string/lon">
             <com.google.android.material.textfield.TextInputEditText

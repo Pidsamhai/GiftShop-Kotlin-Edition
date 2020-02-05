@@ -1,5 +1,7 @@
 package com.mengxyz.giftshopkolinedition.di
 
+import android.app.Activity
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
@@ -8,6 +10,8 @@ import com.mengxyz.giftshopkolinedition.db.repo.FireStoreRepository
 import com.mengxyz.giftshopkolinedition.ui.activity.product_info.ProductInfoViewModel
 import com.mengxyz.giftshopkolinedition.ui.fragment.addproduct.AddProductFragmentViewModel
 import com.mengxyz.giftshopkolinedition.ui.fragment.home.HomeFragmentViewModel
+import com.mengxyz.giftshopkolinedition.utils.PermissionManager
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -34,4 +38,6 @@ val myModule = module {
         instance
     }
     single { FirebaseAuth.getInstance() }
+    single {(params:Activity) -> PermissionManager(get(),activity = params)}
+    single { FusedLocationProviderClient(androidContext()) }
 }

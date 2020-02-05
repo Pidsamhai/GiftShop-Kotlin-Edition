@@ -11,23 +11,28 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.firestore.FieldValue
 import com.mengxyz.giftshopkolinedition.R
 import com.mengxyz.giftshopkolinedition.db.model.ProductModel
+import com.mengxyz.giftshopkolinedition.extentions.await
 import com.mengxyz.giftshopkolinedition.ui.scope.FragmentScope
 import com.mengxyz.giftshopkolinedition.utils.Result
 import kotlinx.android.synthetic.main.fragment_add_product.*
 import kotlinx.android.synthetic.main.product_input.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+
 
 @SuppressLint("SetTextI18n")
 class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPageChangeListener {
     private val viewModel by viewModel<AddProductFragmentViewModel>()
     private var imgs: MutableList<Uri> = mutableListOf()
     private lateinit var adapter: PagerAdapter
+    private val fuseLocation: FusedLocationProviderClient by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +48,29 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
         upload_file.setOnClickListener(this)
         add_img.setOnClickListener(this)
         remove_img.setOnClickListener(this)
+        l_lon.setEndIconOnClickListener {
+            Timber.e("GetLocation")
+            getLocation()
+        }
         initViewPager()
     }
 
+    @SuppressWarnings("MissingPermission")
+    private fun getLocation() = launch(Dispatchers.Main) {
+        if (permissionManager.LOCATION_STATUS()) {
+            showLoading()
+            val location = fuseLocation.lastLocation.await()
+            hideLoading()
+            if (location != null) {
+                e_lon.setText(location.longitude.toString())
+                e_lat.setText(location.latitude.toString())
+            } else {
+                showToast("Cant find location")
+            }
+        } else {
+            askLocationPermission()
+        }
+    }
 
     private fun initViewPager() {
         adapter = context?.let { PagerAdapter(it, imgs) }!!
@@ -93,7 +118,7 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
                 upload_status.text = "upload ${idx + 1} / $size ..."
                 val result = viewModel.uploadImg(img)
                 if (result != Result.Error) {
-                    val (name: String, url: String) = result as Pair<String,String>
+                    val (name: String, url: String) = result as Pair<String, String>
                     imageNameList.add(name)
                     imageUrlList.add(url)
                 } else {
@@ -109,7 +134,7 @@ class AddProductFragment : FragmentScope(), View.OnClickListener, ViewPager.OnPa
                 Timber.e("No file selected Error")
             }
         } catch (e: Exception) {
-            Timber.e(e,"Upload file Error")
+            Timber.e(e, "Upload file Error")
         }
         activity?.onBackPressed()
     }
